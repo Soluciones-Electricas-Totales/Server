@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
+import cors from "cors";
 
 import createRawData from "./controllers/raw-data/create.js";
 import { uploader } from "./lib/fileUtil.js";
@@ -19,6 +20,7 @@ const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(cors());
 // parse application/json
 app.use(bodyParser.json());
 
