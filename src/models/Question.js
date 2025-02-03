@@ -8,7 +8,7 @@ const questionSchema = new mongoose.Schema({
   rawData: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "RawData",
-    required: true,
+    required: false,
   },
   options: [
     {

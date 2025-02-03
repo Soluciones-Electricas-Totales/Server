@@ -4,13 +4,12 @@ const createForm = async (req, res) => {
   const name = req.body.name
   const questions = req.body.questions
 
-  const form = await Form.create({
+  const form = await (await Form.create({
     name,
     questions,
-  });
+  })).populate("questions");
 
-
-  res.status(201).json({ form });
+  res.status(201).json({ form: form });
 };
 
 export default createForm;

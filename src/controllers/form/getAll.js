@@ -1,7 +1,7 @@
 import Form from '../../models/Form.js';
 
 const getAll = async (req, res) => {
-  const forms = await Form.find();
+  const forms = await Form.find().populate('questions');
   res.status(200).json({ forms });
 };
 

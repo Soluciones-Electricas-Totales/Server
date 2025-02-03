@@ -12,6 +12,7 @@ import getAllForms from "./controllers/form/getAll.js";
 import catchErrors from "./decorators/catchErrors.js";
 import createQuestion from "./controllers/question/create.js";
 import createForm from "./controllers/form/create.js";
+import deleteAll from "./controllers/form/deleteAll.js";
 
 dotenv.config();
 
@@ -20,7 +21,9 @@ const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(cors());
+app.use(cors({
+  methods: '*',
+}));
 // parse application/json
 app.use(bodyParser.json());
 
@@ -41,12 +44,13 @@ app.get("/raw-data", catchErrors(getAllRawData));
 app.post("/raw-data", uploader.single("text"), catchErrors(createRawData));
 
 // Questions
-app.get("/question", catchErrors(getAllQuestions));
 app.post("/question", catchErrors(createQuestion));
+app.get("/question", catchErrors(getAllQuestions));
 
 // Forms:
 app.get("/form", catchErrors(getAllForms));
 app.post("/form", catchErrors(createForm));
+app.delete("/form", catchErrors(deleteAll));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
