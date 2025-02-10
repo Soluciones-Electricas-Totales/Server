@@ -5,6 +5,10 @@ const formSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   questions: [
     {
       type: mongoose.Schema.Types.ObjectId,

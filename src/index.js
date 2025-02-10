@@ -13,6 +13,9 @@ import catchErrors from "./decorators/catchErrors.js";
 import createQuestion from "./controllers/question/create.js";
 import createForm from "./controllers/form/create.js";
 import deleteAll from "./controllers/form/deleteAll.js";
+import getById from "./controllers/form/getById.js";
+import getByUserId from "./controllers/form/getByUserId.js";
+import deleteFormById from "./controllers/form/deleteById.js";
 
 dotenv.config();
 
@@ -29,15 +32,15 @@ app.use(bodyParser.json());
 
 // MongoDB connection string (replace with your own or use the environment variable)
 const mongoURI = process.env.MONGO_URI;
-if(!mongoURI) {
+if (!mongoURI) {
   console.error(`mongoURI is undefined`)
   process.exit(1);
 }
 
 mongoose
   .connect(mongoURI)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Raw Info
 app.get("/raw-data", catchErrors(getAllRawData));
@@ -49,8 +52,12 @@ app.get("/question", catchErrors(getAllQuestions));
 
 // Forms:
 app.get("/form", catchErrors(getAllForms));
+app.get('/forms/:id', catchErrors(getById));
+app.get("/forms/user/:userId", catchErrors(getByUserId));
 app.post("/form", catchErrors(createForm));
 app.delete("/form", catchErrors(deleteAll));
+app.delete('/forms/:id', catchErrors(deleteFormById));
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
