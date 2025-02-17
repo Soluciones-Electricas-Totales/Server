@@ -71,7 +71,7 @@ app.delete("/form", catchErrors(deleteAll));
 app.delete('/forms/:id', catchErrors(deleteFormById));
 
 // Games
-app.use('/game', socketioMiddleware(io));
+// app.use('/game', socketioMiddleware(io));
 app.post("/game", catchErrors(createGame));
 app.get("/game/:id", catchErrors(getGameById));
 app.patch("/game/:id", catchErrors(updateById));
