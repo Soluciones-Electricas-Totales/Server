@@ -1,15 +1,27 @@
-
 import Game from "../../models/Game.js";
 
 const createGame = async (req, res) => {
-  const {leaderboard, form } = req.body;
+  const { leaderboard, form, title, description, isRunning } = req.body;
 
-  const game = await Game.create({
-    leaderboard,
-    form,
-  });
+  try {
+    const players = leaderboard.map(player => ({
+      email: player.email,
+      nick: player.nick,
+      score: player.score || 0
+    }));
 
-  res.status(201).json({ game });
+    const game = await Game.create({
+      leaderboard: players,
+      form,
+      title,
+      description,
+      isRunning: isRunning || false,
+    });
+
+    res.status(201).json({ game });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 export default createGame;

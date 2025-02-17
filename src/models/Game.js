@@ -25,6 +25,16 @@ const gameSchema = new mongoose.Schema({
         ref: 'Form',
         required: true
     },
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        required: true,
+        trim: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,
