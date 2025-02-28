@@ -18,7 +18,9 @@ import getById from "./controllers/form/getById.js";
 import getByUserId from "./controllers/form/getByUserId.js";
 import deleteFormById from "./controllers/form/deleteById.js";
 import { createGame, getGameById, updateById, startGame, finishGame } from "./controllers/game/index.js";
-import {socketioMiddleware, catchErrors} from "./decorators/index.js";
+import { socketioMiddleware, catchErrors } from "./decorators/index.js";
+import { metricsMiddleware, metricsEndpoint } from "./metrics/prometheus.js";
+
 dotenv.config();
 
 const app = express();
@@ -54,6 +56,9 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+// Middleware de métricas
+app.use(metricsMiddleware);
+
 // Raw Info
 app.get("/raw-data", catchErrors(getAllRawData));
 app.post("/raw-data", uploader.single("text"), catchErrors(createRawData));
@@ -78,6 +83,13 @@ app.patch("/game/:id", catchErrors(updateById));
 app.patch("/game/:id/start", catchErrors(startGame));
 app.patch("/game/:id/finish", catchErrors(finishGame));
 
+// metrics 
+app.get("/error", (req, res) => {
+  res.status(500).send("Error interno");
+});
+
+// Ruta para métricas
+app.get("/metrics", metricsEndpoint);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
