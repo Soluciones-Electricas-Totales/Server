@@ -1,5 +1,6 @@
 import Payment from '../../models/Payment.js';
 import Purchase from '../../models/Purchase.js';
+import createSignatureIntegrity from '../wompi/signatureIntegrity.js';
 
 const createPayment = async (req, res) => {
     try {
@@ -23,9 +24,19 @@ const createPayment = async (req, res) => {
             status: 'pending'
         });
 
+        if (!payment) {
+            return res.status(404).json({
+                success: false,
+                error: 'Error creando pago'
+            });
+        }
+
+        const signatureIntegrity = await createSignatureIntegrity(payment, amount);
+
         res.status(201).json({
             success: true,
-            data: payment
+            data: payment,
+            sigantureIntegrity: signatureIntegrity
         });
 
     } catch (error) {

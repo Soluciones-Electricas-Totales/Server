@@ -19,7 +19,11 @@ const organizationSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 });
 
 const Organization = mongoose.model('Organization', organizationSchema);

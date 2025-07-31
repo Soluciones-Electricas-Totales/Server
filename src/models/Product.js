@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
         trim: true, // Elimina espacios en blanco al inicio/final
         minlength: [3, 'El nombre debe tener al menos 3 caracteres'],
         maxlength: [100, 'El nombre no puede exceder 100 caracteres'],
-        unique: true // Evita duplicados
+        //unique: false // permite duplicados
     },
     description: {
         type: String,
@@ -38,6 +38,17 @@ const productSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now // Fecha automática al crear
+    },
+    belongsTo: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        type: {
+            type: String,
+            enum: ['Organization', 'Installation'],
+            required: true
+        }
     }
 }, {
     timestamps: true, // Añade createdAt y updatedAt automáticamente

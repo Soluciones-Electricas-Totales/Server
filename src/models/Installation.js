@@ -7,6 +7,11 @@ const installationSchema = new mongoose.Schema({
         trim: true,
         maxlength: [100, 'El nombre no puede exceder 100 caracteres']
     },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Organization owner is required']
+    },
     organization: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organization',
@@ -39,7 +44,11 @@ const installationSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 }, {
     timestamps: true,
     toJSON: { virtuals: true }

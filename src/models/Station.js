@@ -11,6 +11,11 @@ const stationSchema = new mongoose.Schema({
         enum: ['active', 'inactive'],
         default: 'active'
     },
+    inUse: {
+        type: Boolean,
+        default: false,  // 0 = libre (por defecto), 1 = en uso
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,

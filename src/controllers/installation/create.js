@@ -4,10 +4,12 @@ const createInstallation = async (req, res) => {
     try {
         const { name, coordinates } = req.body;
         const organizationId = req.params.organizationId;
+        const ownerId = req.user._id;
 
         const installation = await Installation.create({
             name,
             organization: organizationId,
+            owner: ownerId,
             location: {
                 type: 'Point',
                 coordinates
