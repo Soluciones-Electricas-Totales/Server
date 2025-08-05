@@ -36,6 +36,10 @@ import checkEntityActive from "../controllers/product/checkEntityActive.js";
 import checkStationInstallationAndOrganizationActive from "../controllers/station/checkEntityActive.js";
 import { checkStationInUse } from "../controllers/station/checkIsFree.js";
 import { setInUse } from "../controllers/station/setInUse.js";
+import { getUserActiveActivations } from "../controllers/purchase/getActivePurchasesByUser.js";
+import getStationByID from "../controllers/station/getById.js";
+import getInstallations from "../controllers/installation/get.js";
+import getProductsByInstallation from "../controllers/product/getByInstallation.js";
 
 const router = express.Router();
 
@@ -51,20 +55,24 @@ router.post("/users/login", passport.authenticate('local', { session: false }), 
 //router.post("/product", passport.authenticate('jwt', { session: false }), catchErrors(createProduct));
 router.patch("/product/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateProduct));
 router.get("/product", passport.authenticate('jwt', { session: false }), catchErrors(getProducts));
+router.get("/product/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallation));
 
 router.post("/purchase", passport.authenticate('jwt', { session: false }), catchErrors(checkEntityActive), catchErrors(createPurchase));
 router.get("/purchase/byUser", passport.authenticate('jwt', { session: false }), catchErrors(getUserPurchases));
 router.patch("/purchase/markAsUsed/:id", passport.authenticate('jwt', { session: false }), catchErrors(markAsUsed));
+router.get("/purchase/activeByUser", passport.authenticate('jwt', { session: false }), catchErrors(getUserActiveActivations));
 
 router.post("/organization", passport.authenticate('jwt', { session: false }), catchErrors(createOrganization));
 router.get("/organization/byUser", passport.authenticate('jwt', { session: false }), catchErrors(getOrganizationsByUser));
 router.patch("/organization/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateOrganization));
 
 router.post("/installation/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(createInstallation));
+router.get("/installation", passport.authenticate('jwt', { session: false }), catchErrors(getInstallations));
 router.get("/installation/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(getInstallationsByOrganization));
 router.patch("/installation/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateInstallation));
 
 router.post("/station", passport.authenticate('jwt', { session: false }), catchErrors(createStation));
+router.get("/station/:stationID", passport.authenticate('jwt', { session: false }), catchErrors(getStationByID));
 router.get("/station/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getStationsByInstallation));
 router.patch("/station/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateStatus));
 
@@ -72,7 +80,7 @@ router.post("/payment", passport.authenticate('jwt', { session: false }), catchE
 router.get("/payment/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getPaymentsByPurchase));
 router.patch("/payment/:id", passport.authenticate('jwt', { session: false }), catchErrors(updatePaymentStatus));
 
-router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkStationInUse), catchErrors(startActivation), catchErrors(setInUse));
+router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkStationInUse), catchErrors(startActivation));
 //router.get("/activation/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getactivationsByPurchase));
 router.patch("/activation/:id", passport.authenticate('jwt', { session: false }), catchErrors(completeActivation));
 

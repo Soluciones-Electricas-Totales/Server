@@ -5,6 +5,7 @@ import Purchase from '../../models/Purchase.js';
 const startActivation = async (req, res, next) => {
     try {
         const { purchaseId, stationId } = req.body;
+        const userId = req.user._id; // Assuming JWT auth
 
         const purchase = await Purchase.findById(purchaseId).populate('product');
         console.log(purchase);
@@ -16,9 +17,23 @@ const startActivation = async (req, res, next) => {
             });
         }
 
+        // Validar que no esté ya usada o cancelada
+        if (purchase.status !== 'unused') {
+            return res.status(404).json({
+                success: false,
+                error: `Purchase status is already ${purchase.status}`
+            });
+        }
+        console.log("cambiando a usada")
+        purchase.status = 'used';
+        purchase.usageDate = new Date();
+
+        await purchase.save();
+
         const productTime = purchase.product.time;
 
         const activation = await Activation.create({
+            user: userId,
             purchase: purchaseId,
             station: stationId
             // startTime y status se asignan automáticamente
@@ -37,7 +52,11 @@ const startActivation = async (req, res, next) => {
                 data: activation
             });*/
             res.locals.inUse = 1;
-            next();
+            ///next();
+            res.json({
+                success: true,
+                data: activation
+            });
         }
         publishMessage(req, res, topic, msg, callBackMQTT);
         /*req.mqttClient.publish(process.env.MQTT_TOPIC, "activando", { qos: 1 }, (error) => {
