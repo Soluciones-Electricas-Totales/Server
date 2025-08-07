@@ -8,18 +8,18 @@ const paymentSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['paid', 'pending', 'cancelled', 'declined', 'refunded'],
+        enum: ['approved', 'pending', 'cancelled', 'declined', 'refunded', 'error'],
         default: 'pending',
         required: true
     },
     paymentGateway: {
         type: String,
-        enum: ['stripe', 'paypal', 'mercadopago', 'other'],
+        enum: ['stripe', 'paypal', 'mercadopago', 'wompi', 'other'],
         required: true
     },
     gatewayData: {
         type: mongoose.Schema.Types.Mixed, // Para almacenar respuesta cruda de la pasarela
-        required: true
+        required: false
     },
     amount: {
         type: Number,

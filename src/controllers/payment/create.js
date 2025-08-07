@@ -1,6 +1,9 @@
 import Payment from '../../models/Payment.js';
 import Purchase from '../../models/Purchase.js';
 import createSignatureIntegrity from '../wompi/signatureIntegrity.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const createPayment = async (req, res) => {
     try {
@@ -31,12 +34,13 @@ const createPayment = async (req, res) => {
             });
         }
 
-        const signatureIntegrity = await createSignatureIntegrity(payment, amount);
+        const signatureIntegrity = await createSignatureIntegrity(payment, amount * 100); //amount * 100para pasrlo en centavos
 
         res.status(201).json({
             success: true,
             data: payment,
-            sigantureIntegrity: signatureIntegrity
+            sigantureIntegrity: signatureIntegrity,
+            publicKey: process.env.WOMPI_PUBLIC_KEY
         });
 
     } catch (error) {

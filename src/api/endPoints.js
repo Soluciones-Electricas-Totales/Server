@@ -40,6 +40,7 @@ import { getUserActiveActivations } from "../controllers/purchase/getActivePurch
 import getStationByID from "../controllers/station/getById.js";
 import getInstallations from "../controllers/installation/get.js";
 import getProductsByInstallation from "../controllers/product/getByInstallation.js";
+import paymentCallback from "../controllers/wompi/paymentCallback.js";
 
 const router = express.Router();
 
@@ -86,5 +87,7 @@ router.patch("/activation/:id", passport.authenticate('jwt', { session: false })
 
 router.post("/organization/createProduct/:id", passport.authenticate('jwt', { session: false }), setBelongsToOrganization, catchErrors(createProduct), catchErrors(addProductToOrganization));
 router.post("/installation/createProduct/:id", passport.authenticate('jwt', { session: false }), setBelongsToInstallation, catchErrors(createProduct), catchErrors(addProductToInstallation));
+
+router.post("/wompiCallback", paymentCallback);
 
 export default router;
