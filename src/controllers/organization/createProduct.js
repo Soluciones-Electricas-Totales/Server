@@ -22,7 +22,7 @@ const addProductToOrganization = async (req, res) => {
         res.json({
             success: true,
             message: 'Productos agregados correctamente',
-            data: organization
+            data: product
         });
 
     } catch (error) {

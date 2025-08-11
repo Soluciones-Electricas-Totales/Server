@@ -41,6 +41,9 @@ import getStationByID from "../controllers/station/getById.js";
 import getInstallations from "../controllers/installation/get.js";
 import getProductsByInstallation from "../controllers/product/getByInstallation.js";
 import paymentCallback from "../controllers/wompi/paymentCallback.js";
+import checkAdmin from "../controllers/auth/checkAdmin.js";
+import getProductsByOrganization from "../controllers/product/getByOrganization.js";
+import getProductsByInstallationExclusive from "../controllers/product/getByInstallationExclusive.js";
 
 const router = express.Router();
 
@@ -57,25 +60,27 @@ router.post("/users/login", passport.authenticate('local', { session: false }), 
 router.patch("/product/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateProduct));
 router.get("/product", passport.authenticate('jwt', { session: false }), catchErrors(getProducts));
 router.get("/product/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallation));
+router.get("/product/byInstallationExclusive/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallationExclusive));
+router.get("/product/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getProductsByOrganization));
 
 router.post("/purchase", passport.authenticate('jwt', { session: false }), catchErrors(checkEntityActive), catchErrors(createPurchase));
 router.get("/purchase/byUser", passport.authenticate('jwt', { session: false }), catchErrors(getUserPurchases));
 router.patch("/purchase/markAsUsed/:id", passport.authenticate('jwt', { session: false }), catchErrors(markAsUsed));
 router.get("/purchase/activeByUser", passport.authenticate('jwt', { session: false }), catchErrors(getUserActiveActivations));
 
-router.post("/organization", passport.authenticate('jwt', { session: false }), catchErrors(createOrganization));
-router.get("/organization/byUser", passport.authenticate('jwt', { session: false }), catchErrors(getOrganizationsByUser));
+router.post("/organization", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(createOrganization));
+router.get("/organization/byUser", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getOrganizationsByUser));
 router.patch("/organization/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateOrganization));
 
-router.post("/installation/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(createInstallation));
+router.post("/installation/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(createInstallation));
 router.get("/installation", passport.authenticate('jwt', { session: false }), catchErrors(getInstallations));
-router.get("/installation/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(getInstallationsByOrganization));
-router.patch("/installation/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateInstallation));
+router.get("/installation/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getInstallationsByOrganization));
+router.patch("/installation/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(updateInstallation));
 
-router.post("/station", passport.authenticate('jwt', { session: false }), catchErrors(createStation));
+router.post("/station", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(createStation));
 router.get("/station/:stationID", passport.authenticate('jwt', { session: false }), catchErrors(getStationByID));
 router.get("/station/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getStationsByInstallation));
-router.patch("/station/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateStatus));
+router.patch("/station/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(updateStatus));
 
 router.post("/payment", passport.authenticate('jwt', { session: false }), catchErrors(createPayment));
 router.get("/payment/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getPaymentsByPurchase));
@@ -85,8 +90,8 @@ router.post("/activation", passport.authenticate('jwt', { session: false }), cat
 //router.get("/activation/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getactivationsByPurchase));
 router.patch("/activation/:id", passport.authenticate('jwt', { session: false }), catchErrors(completeActivation));
 
-router.post("/organization/createProduct/:id", passport.authenticate('jwt', { session: false }), setBelongsToOrganization, catchErrors(createProduct), catchErrors(addProductToOrganization));
-router.post("/installation/createProduct/:id", passport.authenticate('jwt', { session: false }), setBelongsToInstallation, catchErrors(createProduct), catchErrors(addProductToInstallation));
+router.post("/organization/createProduct/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), setBelongsToOrganization, catchErrors(createProduct), catchErrors(addProductToOrganization));
+router.post("/installation/createProduct/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), setBelongsToInstallation, catchErrors(createProduct), catchErrors(addProductToInstallation));
 
 router.post("/wompiCallback", paymentCallback);
 

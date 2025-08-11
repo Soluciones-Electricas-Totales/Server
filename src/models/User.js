@@ -36,6 +36,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 6
+    },
+    userType: {
+        type: String,
+        enum: ['general', 'admin'], // Solo permite estos valores
+        default: 'general', // Valor por defecto
+        required: true
     }
 });
 

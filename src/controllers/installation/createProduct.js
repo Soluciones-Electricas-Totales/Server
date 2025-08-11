@@ -22,7 +22,7 @@ const addProductToInstallation = async (req, res) => {
         res.json({
             success: true,
             message: 'Productos agregados correctamente',
-            data: installation
+            data: product
         });
 
     } catch (error) {

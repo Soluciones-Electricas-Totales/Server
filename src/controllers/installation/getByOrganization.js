@@ -3,9 +3,11 @@ import Installation from '../../models/Installation.js';
 const getInstallationsByOrganization = async (req, res) => {
     try {
         const { organizationId } = req.params;
-
+        const ownerId = req.user._id;
+        
         const installations = await Installation.find({
-            organization: organizationId
+            organization: organizationId,
+            owner: ownerId
         }).sort('-createdAt');
 
         res.json({
