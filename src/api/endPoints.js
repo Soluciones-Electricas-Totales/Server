@@ -44,6 +44,7 @@ import paymentCallback from "../controllers/wompi/paymentCallback.js";
 import checkAdmin from "../controllers/auth/checkAdmin.js";
 import getProductsByOrganization from "../controllers/product/getByOrganization.js";
 import getProductsByInstallationExclusive from "../controllers/product/getByInstallationExclusive.js";
+import checkPaymentStatus from "../controllers/payment/checkPaymentStatus.js";
 
 const router = express.Router();
 
@@ -86,7 +87,7 @@ router.post("/payment", passport.authenticate('jwt', { session: false }), catchE
 router.get("/payment/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getPaymentsByPurchase));
 router.patch("/payment/:id", passport.authenticate('jwt', { session: false }), catchErrors(updatePaymentStatus));
 
-router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkStationInUse), catchErrors(startActivation));
+router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkPaymentStatus), catchErrors(checkStationInUse), catchErrors(startActivation));
 //router.get("/activation/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getactivationsByPurchase));
 router.patch("/activation/:id", passport.authenticate('jwt', { session: false }), catchErrors(completeActivation));
 
