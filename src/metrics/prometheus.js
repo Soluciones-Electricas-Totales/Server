@@ -86,7 +86,7 @@ setInterval(() => {
     memoryUsageGauge.set(usedMemory * 100); // Convertir a porcentaje
     cpuUsageGauge.set(cpuLoad * 100);
 
-    console.log(` Métricas actualizadas → Memoria: ${(usedMemory * 100).toFixed(2)}%, CPU: ${(cpuLoad * 100).toFixed(2)}%`);
+    //console.log(` Métricas actualizadas → Memoria: ${(usedMemory * 100).toFixed(2)}%, CPU: ${(cpuLoad * 100).toFixed(2)}%`);
 }, 5000); // Cada 5 segundos
 
 // Endpoint de métricas
