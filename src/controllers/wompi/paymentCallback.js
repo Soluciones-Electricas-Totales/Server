@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import getHashSHA256 from './getHashSHA256.js';
-import { updatePaymentStatus } from '../../lib/UpdatePaymentStatus.js';
+import { updatePaymentStatus } from '../../lib/updatePaymentStatus.js';
 
 dotenv.config();
 
