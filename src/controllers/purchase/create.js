@@ -14,6 +14,13 @@ const createPurchase = async (req, res) => {
             });
         }
 
+        if (product.deleted) {
+            return res.status(404).json({
+                success: false,
+                error: 'invalid Product'
+            });
+        }
+
         const purchase = await Purchase.create({
             user: userId,
             product: productId,

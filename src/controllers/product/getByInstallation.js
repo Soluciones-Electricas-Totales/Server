@@ -1,13 +1,18 @@
 import mongoose from 'mongoose';
 import Installation from '../../models/Installation.js';
 import Product from '../../models/Product.js';
+import Organization from '../../models/Organization.js';
 
 const getProductsByInstallation = async (req, res) => {
     try {
         const { installationId } = req.params;
 
         // 2. Buscar la instalación para obtener la organización
-        const installation = await Installation.findById(installationId);
+        const installation = await Installation.findById(installationId).populate({
+            path: 'products',
+            select: 'name description price time createdAt', // Campos a incluir
+            options: { sort: { createdAt: -1 } } // Ordenar por fecha descendente
+        });
 
         if (!installation) {
             return res.status(404).json({
@@ -18,20 +23,35 @@ const getProductsByInstallation = async (req, res) => {
 
         const organizationId = installation.organization;
 
-        // 3. Buscar productos de la organización (paralelismo para mejor performance)
-        const [orgProducts, installationProducts] = await Promise.all([
-            // Productos de la organización
-            Product.find({
-                'belongsTo.id': organizationId,
-                'belongsTo.type': 'Organization'
-            }),
+        const organization = await Organization.findById(organizationId).populate({
+            path: 'products',
+            select: 'name description price time createdAt', // Campos a incluir
+            options: { sort: { createdAt: -1 } } // Ordenar por fecha descendente
+        });
 
-            // Productos específicos de la instalación
-            Product.find({
-                'belongsTo.id': installationId,
-                'belongsTo.type': 'Installation'
-            })
-        ]);
+        if (!organization) {
+            return res.status(404).json({
+                success: false,
+                message: 'Instalación no valida'
+            });
+        }
+        const installationProducts = installation.products
+        const orgProducts = organization.products;
+
+        // 3. Buscar productos de la organización (paralelismo para mejor performance)
+        // const [orgProducts, installationProducts] = await Promise.all([
+        //     // Productos de la organización
+        //     Product.find({
+        //         'belongsTo.id': organizationId,
+        //         'belongsTo.type': 'Organization'
+        //     }),
+
+        //     // Productos específicos de la instalación
+        //     Product.find({
+        //         'belongsTo.id': installationId,
+        //         'belongsTo.type': 'Installation'
+        //     })
+        // ]);
 
         // 4. Combinar y eliminar duplicados (si es necesario)
         const combinedProducts = [...orgProducts, ...installationProducts];

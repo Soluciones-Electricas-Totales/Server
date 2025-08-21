@@ -45,6 +45,10 @@ import checkAdmin from "../controllers/auth/checkAdmin.js";
 import getProductsByOrganization from "../controllers/product/getByOrganization.js";
 import getProductsByInstallationExclusive from "../controllers/product/getByInstallationExclusive.js";
 import checkPaymentStatus from "../controllers/payment/checkPaymentStatus.js";
+import { checkStationOwner } from "../controllers/station/checkOwner.js";
+import deleteStation from "../controllers/station/delete.js";
+import { checkProductOwner } from "../controllers/product/checkOwner.js";
+import softDeleteProduct from "../controllers/product/delete.js";
 
 const router = express.Router();
 
@@ -63,6 +67,7 @@ router.get("/product", passport.authenticate('jwt', { session: false }), catchEr
 router.get("/product/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallation));
 router.get("/product/byInstallationExclusive/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallationExclusive));
 router.get("/product/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getProductsByOrganization));
+router.delete("/product/:productId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(checkProductOwner), catchErrors(softDeleteProduct));
 
 router.post("/purchase", passport.authenticate('jwt', { session: false }), catchErrors(checkEntityActive), catchErrors(createPurchase));
 router.get("/purchase/byUser", passport.authenticate('jwt', { session: false }), catchErrors(getUserPurchases));
@@ -82,6 +87,7 @@ router.post("/station", passport.authenticate('jwt', { session: false }), catchE
 router.get("/station/:stationID", passport.authenticate('jwt', { session: false }), catchErrors(getStationByID));
 router.get("/station/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getStationsByInstallation));
 router.patch("/station/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(updateStatus));
+router.delete("/station/:stationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(checkStationOwner), catchErrors(deleteStation));
 
 router.post("/payment", passport.authenticate('jwt', { session: false }), catchErrors(createPayment));
 router.get("/payment/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getPaymentsByPurchase));

@@ -39,6 +39,10 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now // Fecha automática al crear
     },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     belongsTo: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
