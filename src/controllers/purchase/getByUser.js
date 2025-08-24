@@ -1,9 +1,10 @@
+import Payment from '../../models/Payment.js';
 import Purchase from '../../models/Purchase.js';
 
 const getUserPurchases = async (req, res) => {
     try {
 
-        const { status, minPrice, maxPrice, startDate, endDate, product } = req.query;
+        const { status, minPrice, maxPrice, startDate, endDate, product, paymentStatus } = req.query;
 
         const filters = {
             user: req.user._id // Siempre filtrar por el usuario autenticado
@@ -30,10 +31,51 @@ const getUserPurchases = async (req, res) => {
             .populate('product')
             .sort('-purchaseDate');
 
+        let filteredPurchases = purchases;
+
+        console.log("declaracion");
+        console.log(filteredPurchases);
+
+
+        if (purchases.length > 0) {
+            console.log("entra p");
+
+            const purchaseIds = purchases.map(purchase => purchase._id);
+            const payments = await Payment.find({
+                purchase: { $in: purchaseIds }
+            }).select('purchase status paymentGateway amount currency processedAt createdAt');
+            const paymentMap = {};
+            payments.forEach(payment => {
+                paymentMap[payment.purchase.toString()] = payment;
+            });
+            console.log(paymentMap);
+
+            // Formatear la respuesta para incluir la información del payment
+            const formattedPurchases = purchases.map(purchase => {
+                const payment = paymentMap[purchase._id.toString()];
+                return {
+                    ...purchase.toObject(), // Convertir a objeto plano
+                    payment: payment || null
+                };
+            });
+            console.log(formattedPurchases);
+
+            // Si hay filtro por paymentStatus, aplicarlo después
+            filteredPurchases = formattedPurchases;
+            if (paymentStatus) {
+                filteredPurchases = formattedPurchases.filter(purchase =>
+                    purchase.payment && purchase.payment.status === paymentStatus
+                );
+            }
+
+        }
+        console.log(filteredPurchases);
+
+
         res.json({
             success: true,
-            count: purchases.length,
-            data: purchases
+            count: filteredPurchases.length,
+            data: filteredPurchases
         });
 
     } catch (error) {
