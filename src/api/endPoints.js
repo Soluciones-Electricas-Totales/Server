@@ -49,6 +49,9 @@ import { checkStationOwner } from "../controllers/station/checkOwner.js";
 import deleteStation from "../controllers/station/delete.js";
 import { checkProductOwner } from "../controllers/product/checkOwner.js";
 import softDeleteProduct from "../controllers/product/delete.js";
+import createRecoveryToken from "../controllers/recoveryToken/create.js";
+import checkToken from "../controllers/recoveryToken/checkToken.js";
+import updateUserPassword from "../controllers/user/updatePassword.js";
 
 const router = express.Router();
 
@@ -56,6 +59,8 @@ const router = express.Router();
 router.post("/users", catchErrors(createUser));
 router.get("/users/:id", passport.authenticate('jwt', { session: false }), catchErrors(getById));
 router.patch("/users/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateUser));
+router.patch("/user/restorePassword", catchErrors(checkToken), catchErrors(updateUserPassword));
+router.patch("/user/updatePassword", passport.authenticate('local', { session: false }), catchErrors(updateUserPassword));
 
 router.get("/setStatus/:status", catchErrors(setStatus));
 
@@ -101,5 +106,7 @@ router.post("/organization/createProduct/:id", passport.authenticate('jwt', { se
 router.post("/installation/createProduct/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), setBelongsToInstallation, catchErrors(createProduct), catchErrors(addProductToInstallation));
 
 router.post("/wompiCallback", paymentCallback);
+
+router.post("/recoveryToken", catchErrors(createRecoveryToken));
 
 export default router;
