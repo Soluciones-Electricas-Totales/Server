@@ -5,6 +5,8 @@ dotenv.config();
 
 export const sendMail = (mailInfo) => {
     // Configurar el transportador (transporter)
+    console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
+
     const transporter = NodeMailer.createTransport({
         service: process.env.EMAIL_SERVICE,
         auth: {
