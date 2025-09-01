@@ -52,6 +52,7 @@ import softDeleteProduct from "../controllers/product/delete.js";
 import createRecoveryToken from "../controllers/recoveryToken/create.js";
 import checkToken from "../controllers/recoveryToken/checkToken.js";
 import updateUserPassword from "../controllers/user/updatePassword.js";
+import checkPurchaseStationValid from "../controllers/purchase/checkPurchaseStationValid.js";
 
 const router = express.Router();
 
@@ -98,7 +99,7 @@ router.post("/payment", passport.authenticate('jwt', { session: false }), catchE
 router.get("/payment/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getPaymentsByPurchase));
 router.patch("/payment/:id", passport.authenticate('jwt', { session: false }), catchErrors(updatePaymentStatus));
 
-router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkPaymentStatus), catchErrors(checkStationInUse), catchErrors(startActivation));
+router.post("/activation", passport.authenticate('jwt', { session: false }), catchErrors(checkPurchaseStationValid), catchErrors(checkStationInstallationAndOrganizationActive), catchErrors(checkPaymentStatus), catchErrors(checkStationInUse), catchErrors(startActivation));
 //router.get("/activation/byPurchase/:purchaseId", passport.authenticate('jwt', { session: false }), catchErrors(getactivationsByPurchase));
 router.patch("/activation/:id", passport.authenticate('jwt', { session: false }), catchErrors(completeActivation));
 
