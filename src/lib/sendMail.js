@@ -1,13 +1,23 @@
 import NodeMailer from 'nodemailer'
 import dotenv from 'dotenv';
+import { Resend } from 'resend';
 
 dotenv.config();
 
-export const sendMail = (mailInfo) => {
+export const sendMail = async (mailInfo) => {
     // Configurar el transportador (transporter)
     console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
 
-    const transporter = NodeMailer.createTransport({
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const result = await resend.emails.send({
+        from: process.env.EMAIL_SENDER_ADDRESS,
+        to: "juanescs08@gmail.com",//mailInfo.to,
+        subject: mailInfo.subject,
+        html: mailInfo.html
+    });
+    console.log(result);
+
+    /*const transporter = NodeMailer.createTransport({
         service: process.env.EMAIL_SERVICE,
         auth: {
             user: process.env.EMAIL_SENDER_ADDRESS,
@@ -30,7 +40,7 @@ export const sendMail = (mailInfo) => {
         } else {
             console.log('Correo enviado con éxito:', info.response);
         }
-    });
+    });*/
 }
 
 

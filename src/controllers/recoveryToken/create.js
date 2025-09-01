@@ -37,7 +37,7 @@ const createRecoveryToken = async (req, res) => {
         const response = await recoveryToken.save();
         console.log(response);
 
-        sendMail({
+        await sendMail({
             to: email,
             subject: "Recuperacion de contraseña",
             html: getHTMLBodySendToken({ token: token })

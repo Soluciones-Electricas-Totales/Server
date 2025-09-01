@@ -5,7 +5,7 @@ const getInstallations = async (req, res) => {
         // 1. Parsear parámetros de consulta
         const {
             page = 1,
-            limit = 10,
+            limit = 1000,
             sort = '-createdAt',
             status,
             organization,
