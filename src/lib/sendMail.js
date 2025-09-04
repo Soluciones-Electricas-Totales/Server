@@ -6,7 +6,7 @@ dotenv.config();
 
 export const sendMail = async (mailInfo) => {
     // Configurar el transportador (transporter)
-    console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
+    /*console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     const result = await resend.emails.send({
@@ -15,9 +15,9 @@ export const sendMail = async (mailInfo) => {
         subject: mailInfo.subject,
         html: mailInfo.html
     });
-    console.log(result);
+    console.log(result);*/
 
-    /*const transporter = NodeMailer.createTransport({
+    const transporter = NodeMailer.createTransport({
         service: process.env.EMAIL_SERVICE,
         auth: {
             user: process.env.EMAIL_SENDER_ADDRESS,
@@ -40,7 +40,7 @@ export const sendMail = async (mailInfo) => {
         } else {
             console.log('Correo enviado con éxito:', info.response);
         }
-    });*/
+    });
 }
 
 
