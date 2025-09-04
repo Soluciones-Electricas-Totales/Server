@@ -6,8 +6,8 @@ dotenv.config();
 
 export const sendMail = async (mailInfo) => {
     // Configurar el transportador (transporter)
-    /*console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
-
+    console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
+/*
     const resend = new Resend(process.env.RESEND_API_KEY);
     const result = await resend.emails.send({
         from: process.env.EMAIL_SENDER_ADDRESS,
