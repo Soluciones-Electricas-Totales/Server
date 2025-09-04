@@ -7,15 +7,15 @@ dotenv.config();
 export const sendMail = async (mailInfo) => {
     // Configurar el transportador (transporter)
     console.log(process.env.EMAIL_SERVICE, process.env.EMAIL_SENDER_ADDRESS, process.env.EMAIL_SENDER_APPLICATION_PASSWORD, mailInfo);
-/*
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const result = await resend.emails.send({
-        from: process.env.EMAIL_SENDER_ADDRESS,
-        to: "juanescs08@gmail.com",//mailInfo.to,
-        subject: mailInfo.subject,
-        html: mailInfo.html
-    });
-    console.log(result);*/
+    /*
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const result = await resend.emails.send({
+            from: process.env.EMAIL_SENDER_ADDRESS,
+            to: "juanescs08@gmail.com",//mailInfo.to,
+            subject: mailInfo.subject,
+            html: mailInfo.html
+        });
+        console.log(result);*/
 
     const transporter = NodeMailer.createTransport({
         service: process.env.EMAIL_SERVICE,
@@ -32,15 +32,20 @@ export const sendMail = async (mailInfo) => {
         //text: 'Hola, este es un correo enviado desde Node.js usando Nodemailer.', // Texto del correo
         html: mailInfo.html
     };
+    return new Promise((resolve, reject) => {
+        // Enviar el correo
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error al enviar el correo:', error);
+                reject(error);
+            } else {
+                console.log('Correo enviado con éxito:', info.response);
+                resolve(info);
+            }
+        });
 
-    // Enviar el correo
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error al enviar el correo:', error);
-        } else {
-            console.log('Correo enviado con éxito:', info.response);
-        }
-    });
+    })
+
 }
 
 
