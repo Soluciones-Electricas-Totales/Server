@@ -53,6 +53,7 @@ import createRecoveryToken from "../controllers/recoveryToken/create.js";
 import checkToken from "../controllers/recoveryToken/checkToken.js";
 import updateUserPassword from "../controllers/user/updatePassword.js";
 import checkPurchaseStationValid from "../controllers/purchase/checkPurchaseStationValid.js";
+import redirectToApp from "../controllers/mobileApp/redirectToApp.js";
 
 const router = express.Router();
 
@@ -108,6 +109,6 @@ router.post("/installation/createProduct/:id", passport.authenticate('jwt', { se
 
 router.post("/wompiCallback", paymentCallback);
 
-router.post("/recoveryToken", catchErrors(createRecoveryToken));
+router.get("/redirectToApp", catchErrors(redirectToApp));
 
 export default router;
