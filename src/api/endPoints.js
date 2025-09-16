@@ -109,6 +109,8 @@ router.post("/installation/createProduct/:id", passport.authenticate('jwt', { se
 
 router.post("/wompiCallback", paymentCallback);
 
+router.post("/recoveryToken", catchErrors(createRecoveryToken));
+
 router.get("/redirectToApp", catchErrors(redirectToApp));
 
 export default router;

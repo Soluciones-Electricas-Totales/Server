@@ -15,7 +15,13 @@ const createRecoveryToken = async (req, res) => {
         // Verificar que el usuario existe
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ error: "Usuario no encontrado" });
+            //return res.status(404).json({ error: "Usuario no encontrado" });
+            return res.json({
+                success: true,
+                message: "Código de recuperación generado y enviado",
+                //userId: user._id,
+                note: "El código fue enviado al email registrado"
+            });
         }
 
         // Invalidar tokens previos del usuario
@@ -39,7 +45,7 @@ const createRecoveryToken = async (req, res) => {
 
         await sendMail({
             to: email,
-            subject: "Recuperacion de contraseña",
+            subject: "Recuperación de contraseña",
             html: getHTMLBodySendToken({ token: token })
         });
 
