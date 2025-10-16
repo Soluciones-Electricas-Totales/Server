@@ -43,7 +43,7 @@ const getUserPurchases = async (req, res) => {
             const purchaseIds = purchases.map(purchase => purchase._id);
             const payments = await Payment.find({
                 purchase: { $in: purchaseIds }
-            }).select('purchase status paymentGateway amount currency processedAt createdAt');
+            }).select('purchase status paymentGateway amount currency processedAt createdAt updatedAt');
             const paymentMap = {};
             payments.forEach(payment => {
                 paymentMap[payment.purchase.toString()] = payment;
