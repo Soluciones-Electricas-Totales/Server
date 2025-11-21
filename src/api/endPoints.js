@@ -55,6 +55,7 @@ import updateUserPassword from "../controllers/user/updatePassword.js";
 import checkPurchaseStationValid from "../controllers/purchase/checkPurchaseStationValid.js";
 import redirectToApp from "../controllers/mobileApp/redirectToApp.js";
 import politicaTratamientoDatos from "../controllers/mobileApp/PoliticaTratamientoDatos.js";
+import eliminacionCuenta from "../controllers/mobileApp/EliminacionCuenta.js";
 
 const router = express.Router();
 
@@ -114,5 +115,6 @@ router.post("/recoveryToken", catchErrors(createRecoveryToken));
 
 router.get("/redirectToApp", catchErrors(redirectToApp));
 router.get("/tratamientoDatos", catchErrors(politicaTratamientoDatos));
+router.get("/eliminarCuenta", catchErrors(eliminacionCuenta));
 
 export default router;
