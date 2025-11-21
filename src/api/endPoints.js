@@ -54,6 +54,7 @@ import checkToken from "../controllers/recoveryToken/checkToken.js";
 import updateUserPassword from "../controllers/user/updatePassword.js";
 import checkPurchaseStationValid from "../controllers/purchase/checkPurchaseStationValid.js";
 import redirectToApp from "../controllers/mobileApp/redirectToApp.js";
+import politicaTratamientoDatos from "../controllers/mobileApp/PoliticaTratamientoDatos.js";
 
 const router = express.Router();
 
@@ -112,5 +113,6 @@ router.post("/wompiCallback", paymentCallback);
 router.post("/recoveryToken", catchErrors(createRecoveryToken));
 
 router.get("/redirectToApp", catchErrors(redirectToApp));
+router.get("/tratamientoDatos", catchErrors(politicaTratamientoDatos));
 
 export default router;
