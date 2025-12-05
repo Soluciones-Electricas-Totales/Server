@@ -73,7 +73,7 @@ router.post("/users/login", passport.authenticate('local', { session: false }), 
 //router.post("/product", passport.authenticate('jwt', { session: false }), catchErrors(createProduct));
 router.patch("/product/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateProduct));
 router.get("/product", passport.authenticate('jwt', { session: false }), catchErrors(getProducts));
-router.get("/product/byInstallation/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallation));
+router.get("/product/byInstallation/:installationId", /*passport.authenticate('jwt', { session: false }),*/ catchErrors(getProductsByInstallation));
 router.get("/product/byInstallationExclusive/:installationId", passport.authenticate('jwt', { session: false }), catchErrors(getProductsByInstallationExclusive));
 router.get("/product/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getProductsByOrganization));
 router.delete("/product/:productId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(checkProductOwner), catchErrors(softDeleteProduct));
@@ -88,7 +88,7 @@ router.get("/organization/byUser", passport.authenticate('jwt', { session: false
 router.patch("/organization/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateOrganization));
 
 router.post("/installation/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(createInstallation));
-router.get("/installation", passport.authenticate('jwt', { session: false }), catchErrors(getInstallations));
+router.get("/installation", /*passport.authenticate('jwt', { session: false }),*/ catchErrors(getInstallations));
 router.get("/installation/byOrganization/:organizationId", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(getInstallationsByOrganization));
 router.patch("/installation/:id", passport.authenticate('jwt', { session: false }), catchErrors(checkAdmin), catchErrors(updateInstallation));
 
