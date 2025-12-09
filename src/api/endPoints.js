@@ -56,6 +56,7 @@ import checkPurchaseStationValid from "../controllers/purchase/checkPurchaseStat
 import redirectToApp from "../controllers/mobileApp/redirectToApp.js";
 import politicaTratamientoDatos from "../controllers/mobileApp/PoliticaTratamientoDatos.js";
 import eliminacionCuenta from "../controllers/mobileApp/EliminacionCuenta.js";
+import deleteUser from "../controllers/user/delete.js";
 
 const router = express.Router();
 
@@ -65,6 +66,7 @@ router.get("/users/:id", passport.authenticate('jwt', { session: false }), catch
 router.patch("/users/:id", passport.authenticate('jwt', { session: false }), catchErrors(updateUser));
 router.patch("/user/restorePassword", catchErrors(checkToken), catchErrors(updateUserPassword));
 router.patch("/user/updatePassword", passport.authenticate('local', { session: false }), catchErrors(updateUserPassword));
+router.patch("/user/delete", passport.authenticate('jwt', { session: false }), catchErrors(deleteUser));
 
 router.get("/setStatus/:status", catchErrors(setStatus));
 

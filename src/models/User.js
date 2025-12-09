@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
+
+function generateRandomString(length = 10) {
+    return crypto.randomBytes(length).toString('hex');
+}
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -39,7 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ['general', 'admin'], // Solo permite estos valores
+        enum: ['general', 'admin', 'deleted'], // Solo permite estos valores
         default: 'general', // Valor por defecto
         required: true
     }
@@ -56,6 +61,15 @@ userSchema.pre('save', async function (next) {
 // Add method to compare passwords
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.anonymize = async function () {
+    this.email = `${this._id}@nobody.com`;
+    this.nombre = "nobody";
+    this.apellido = "nobody";
+    this.password = generateRandomString(16);
+    this.userType = 'deleted';
+    return this.save();
 };
 
 const UserSchema = mongoose.model("User", userSchema);
